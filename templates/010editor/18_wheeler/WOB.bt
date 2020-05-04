@@ -1,0 +1,193 @@
+//------------------------------------------------
+//--- 010 Editor v8.0.1 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+local float count, size;
+
+struct {
+  UINT Section1Offset;
+  UINT Section2Offset;
+  UINT Section3Offset;
+  UINT Section4Offset;
+  UINT Unknown;
+  UINT Unknown;
+  UINT Unknown;
+  UINT Unknown;
+  UINT Unknown;
+} HEADER <name="File header">;
+
+struct {
+  count = (HEADER.Section2Offset - HEADER.Section1Offset)/4; 
+  struct {
+    UINT Offset;
+  } S1[count];
+} SECTION1 <name="Offsets">;
+
+struct {
+  count = (HEADER.Section3Offset - HEADER.Section2Offset)/4; 
+  struct {
+    UINT TextureOffset;
+  } TABLE[count];
+} SECTION2 <name="Texture offsets">;
+
+struct {
+  count = (HEADER.Section4Offset - HEADER.Section3Offset)/36; 
+  UINT Offset1;
+  UINT Offset2;
+  UINT Offset3;
+  struct {
+    INT Unknown;
+    UINT Unknown;
+    FLOAT Unknown;
+    UINT Unknown;
+    UINT Unknown;
+    FLOAT Unknown;
+    FLOAT Unknown;
+    FLOAT Unknown;
+    FLOAT Unknown;
+  } S3[count];
+} SECTION3;
+
+struct {
+  UINT Offset1;
+  UINT Offset2;
+  UINT Offset3;
+  struct {
+    FLOAT Unknown[(Offset2 - Offset1)/4];
+  } S1;
+  struct {
+    FLOAT Unknown[(Offset3 - Offset2)/4];
+  } S2;
+  struct {
+    FLOAT Unknown[96/4];
+  } S3;
+  UINT Unknown;
+} SECTION4;
+
+typedef struct {
+  struct {
+    UINT type;
+    UINT Unknown;
+    UINT Unknown;
+    UINT Unknown;
+    UINT Width;
+    UINT Height;
+    UINT Unknown;
+    UINT Unknown;
+    UINT Unknown;
+    UINT Unknown;
+    UINT Unknown;
+    UINT Unknown;
+    UINT Unknown;
+    UINT Unknown;
+    UINT Width1;
+    UINT Height1;
+    UINT Unknown;
+    UINT Unknown;
+    UINT Unknown;
+    UINT Unknown;
+  } TEXTURE_HEADER;
+  switch (TEXTURE_HEADER.type) 
+  {
+    case 0: 
+      BYTE Data[TEXTURE_HEADER.Width*TEXTURE_HEADER.Height*4];  
+      break;
+    case 2: 
+      BYTE Data[TEXTURE_HEADER.Width*TEXTURE_HEADER.Height*2];  
+      break;
+    case 19: 
+      BYTE ImageData[TEXTURE_HEADER.Width*TEXTURE_HEADER.Height];
+      BYTE Palette[1024];
+      break;
+    case 20: 
+      BYTE ImageData[TEXTURE_HEADER.Width*TEXTURE_HEADER.Height/2];
+      BYTE Some[64];
+    break;
+  };
+} TEXTURE;
+
+FSeek(SECTION2.TABLE[0].TextureOffset);
+size = sizeof(SECTION2.TABLE)/4.0;
+struct {
+  TEXTURE Texture[size] <optimize=false>;
+} SECTION5 <name="Textures">;
+
+struct {
+  UINT Unknown;
+  UINT Unknown;
+  UINT Unknown;
+  UINT Unknown;
+  UINT Unknown;
+  UINT Unknown;
+  UINT Unknown;
+  UINT Unknown;
+  UINT Unknown;
+  UINT Unknown;
+  UINT Unknown;
+  UINT Unknown;
+  UINT Unknown;
+  UINT Unknown;
+  UINT Unknown;
+  UINT Unknown;
+  UINT Unknown;
+  UINT Unknown;
+  UINT Unknown;
+  UINT Unknown;
+  UINT Unknown;
+  UINT Unknown;
+  UINT Unknown;
+  UINT Unknown;
+  UINT Unknown;
+  UINT Unknown;
+  UINT Unknown;
+  UINT Unknown;
+  UINT Unknown;
+  UINT Unknown;
+  char Name[36];
+  FLOAT UNKNOWN;
+  FLOAT UNKNOWN;
+  FLOAT UNKNOWN;
+  FLOAT UNKNOWN;
+  FLOAT UNKNOWN;
+  FLOAT UNKNOWN;
+  FLOAT UNKNOWN;
+  FLOAT UNKNOWN;
+  FLOAT UNKNOWN;
+  FLOAT UNKNOWN;
+  FLOAT UNKNOWN;
+  FLOAT UNKNOWN;
+  FLOAT UNKNOWN;
+  FLOAT UNKNOWN;
+  FLOAT UNKNOWN;
+  FLOAT UNKNOWN;
+  FLOAT UNKNOWN;
+  UINT Unknown;
+  UINT Unknown;
+  UINT Unknown;
+  UINT Unknown;
+  UINT Unknown;
+  UINT Unknown;
+  UINT Unknown;
+  UINT Unknown;
+  //
+  struct {
+    FLOAT UNKNOWN;
+    FLOAT UNKNOWN;
+    FLOAT UNKNOWN;
+    FLOAT UNKNOWN;
+    FLOAT UNKNOWN;
+    FLOAT UNKNOWN;
+    FLOAT UNKNOWN;
+    FLOAT UNKNOWN;
+  } Ar[143];
+
+} SECTION6;
